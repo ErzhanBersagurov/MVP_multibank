@@ -6,7 +6,7 @@ import sberIcon from '../assets/icon_sber.png';
 import tbankIcon from '../assets/icon_tbank.png';
 import avatarImage from '../assets/avatar.jpg';
 
-const Dashboard = () => {
+const Dashboard = ({ onLogout }) => {
   const [accounts, setAccounts] = useState([]);
   const [totalBalance, setTotalBalance] = useState(0);
   const [loading, setLoading] = useState(true);
@@ -19,7 +19,6 @@ const Dashboard = () => {
   const [transferCode, setTransferCode] = useState('');
 
   useEffect(() => {
-    // Check for saved theme preference or default to light mode
     const savedTheme = localStorage.getItem('theme');
     if (savedTheme === 'dark') {
       setIsDarkMode(true);
@@ -77,7 +76,6 @@ const Dashboard = () => {
         setToAccount('');
         setTransferAmount('');
         setTransferCode('');
-        // Обновляем данные
         loadData();
       } else {
         alert('Ошибка при выполнении перевода');
@@ -119,7 +117,6 @@ const Dashboard = () => {
   if (loading) return <div className="loading">Загрузка...</div>;
   if (error) return <div className="error">{error}</div>;
 
-  // Группируем счета по банкам
   const bankAccounts = accounts.reduce((acc, account) => {
     const bankName = account.bank_name;
     if (!acc[bankName]) {
@@ -142,7 +139,6 @@ const Dashboard = () => {
     }
   };
 
-  // Определяем порядок банков с Альфа-банком первым
   const bankOrder = ['Альфа-Банк', 'Тинькофф', 'Сбербанк'];
   const orderedBanks = bankOrder.filter(bank => bankAccounts[bank]);
   const otherBanks = Object.keys(bankAccounts).filter(bank => !bankOrder.includes(bank));
@@ -168,6 +164,23 @@ const Dashboard = () => {
           <span className="username">АНТОН</span>
           <button className="theme-toggle" onClick={toggleTheme}>
             {isDarkMode ? '☀️' : '🌙'}
+          </button>
+          
+          {/* КНОПКА ВЫХОДА */}
+          <button 
+            className="logout-button"
+            onClick={onLogout}
+            style={{
+              background: '#dc3545',
+              color: 'white',
+              border: 'none',
+              padding: '8px 16px',
+              borderRadius: '4px',
+              cursor: 'pointer',
+              marginLeft: '10px'
+            }}
+          >
+            Выйти
           </button>
         </div>
       </div>

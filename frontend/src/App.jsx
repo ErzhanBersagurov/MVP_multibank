@@ -3,6 +3,7 @@ import Login from './components/Login';
 import Register from './components/Register';
 import Dashboard from './components/Dashboard';
 import ExpensesPage from './components/ExpensesPage';
+import HistoryPage from './components/HistoryPage'; // ← ДОБАВИТЬ
 import BottomNavigation from './components/BottomNavigation';
 import './App.css'
 
@@ -50,6 +51,9 @@ function App() {
       <div className="app-content">
         {activeTab === 'dashboard' && (
           <Dashboard onLogout={handleLogout} />
+        )}
+        {activeTab === 'history' && (
+          <HistoryPage onBack={() => setActiveTab('dashboard')} />
         )}
         {activeTab === 'expenses' && (
           <ExpensesPage onBack={() => setActiveTab('dashboard')} />

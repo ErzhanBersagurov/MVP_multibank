@@ -3,7 +3,7 @@ package handlers
 import (
     "net/http"
     "time"
-    "os"  // ← ДОБАВИТЬ ЭТОТ ИМПОРТ!
+    "os"
     
     "github.com/gin-gonic/gin"
     "github.com/golang-jwt/jwt/v5"
@@ -14,15 +14,30 @@ import (
 )
 
 type AuthHandler struct {
-    userStorage *storage.UserStorage
+    userStorage *storage.UserStorage  // ВЕРНУТЬ указатель *
 }
 
-func NewAuthHandler(userStorage *storage.UserStorage) *AuthHandler {
+func NewAuthHandler(userStorage *storage.UserStorage) *AuthHandler {  // ВЕРНУТЬ указатель *
     return &AuthHandler{userStorage: userStorage}
 }
 
+// CORS middleware и остальной код БЕЗ ИЗМЕНЕНИЙ
 func (h *AuthHandler) StartServer(port string) error {
     r := gin.Default()
+    
+    // CORS middleware - ОСТАВИТЬ!
+    r.Use(func(c *gin.Context) {
+        c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+        c.Writer.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS")
+        c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+        
+        if c.Request.Method == "OPTIONS" {
+            c.AbortWithStatus(204)
+            return
+        }
+        
+        c.Next()
+    })
     
     r.POST("/register", h.Register)
     r.POST("/login", h.Login)
@@ -32,6 +47,7 @@ func (h *AuthHandler) StartServer(port string) error {
     return r.Run(":" + port)
 }
 
+// Все остальные методы БЕЗ ИЗМЕНЕНИЙ
 func (h *AuthHandler) Register(c *gin.Context) {
     var user models.User
     if err := c.ShouldBindJSON(&user); err != nil {
@@ -73,10 +89,9 @@ func (h *AuthHandler) Login(c *gin.Context) {
         "exp":     time.Now().Add(time.Hour * 24).Unix(),
     })
 
-    // ИСПРАВЛЕННЫЙ БЛОК - добавляем получение JWT_SECRET из env
     jwtSecret := os.Getenv("JWT_SECRET")
     if jwtSecret == "" {
-        jwtSecret = "simple-secret-12345"  // ← ПРОСТОЙ СЕКРЕТ
+        jwtSecret = "simple-secret-12345"
     }
     tokenString, err := token.SignedString([]byte(jwtSecret))
 
@@ -92,7 +107,6 @@ func (h *AuthHandler) Login(c *gin.Context) {
 }
 
 func (h *AuthHandler) ValidateToken(c *gin.Context) {
-    // Реализация валидации токена
     c.JSON(http.StatusOK, gin.H{"valid": true})
 }
 

@@ -53,32 +53,33 @@ func (s *TransferService) updateAccountBalances(fromAccount, toAccount string, a
         "to_account":   toAccount,
         "amount":       amount,
     }
-    
+
     jsonData, err := json.Marshal(updateReq)
     if err != nil {
         return err
     }
-    
+
     // Создаем HTTP клиент и запрос с авторизационным заголовком
     client := &http.Client{}
-    req, err := http.NewRequest("POST", "http://localhost:8081/balance/update", bytes.NewBuffer(jsonData))
+    // 🔥 ИСПРАВЛЕНИЕ: заменили localhost на accounts-service
+    req, err := http.NewRequest("POST", "http://accounts-service:8081/balance/update", bytes.NewBuffer(jsonData))
     if err != nil {
         return err
     }
-    
+
     req.Header.Set("Content-Type", "application/json")
     req.Header.Set("Authorization", authToken)
-    
+
     resp, err := client.Do(req)
     if err != nil {
         return err
     }
     defer resp.Body.Close()
-    
+
     if resp.StatusCode != http.StatusOK {
         return fmt.Errorf("accounts-service returned status %d", resp.StatusCode)
     }
-    
+
     return nil
 }
 

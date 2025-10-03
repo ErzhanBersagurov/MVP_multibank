@@ -1,0 +1,221 @@
+.history-page {
+  min-height: 100vh;
+  background: var(--bg-color, #f5f5f5);
+  padding-bottom: 80px;
+}
+
+.history-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  background: white;
+  border-bottom: 1px solid #e0e0e0;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.back-button:hover {
+  background: #f0f0f0;
+}
+
+.history-header h2 {
+  margin: 0;
+  color: #333;
+  font-size: 1.25rem;
+}
+
+.history-content {
+  padding: 1rem;
+}
+
+.loading, .error {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+}
+
+.error {
+  color: #dc3545;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #666;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.empty-state h3 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.empty-state p {
+  margin: 0;
+  opacity: 0.7;
+}
+
+.transactions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.transaction-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-left: 4px solid #007bff;
+}
+
+.transaction-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.transaction-id {
+  font-size: 0.85rem;
+  color: #666;
+  font-family: monospace;
+}
+
+.transaction-status {
+  font-size: 0.8rem;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-weight: 500;
+}
+
+.transaction-status.completed {
+  background: #d4edda;
+  color: #155724;
+}
+
+.transaction-details {
+  margin-bottom: 0.75rem;
+}
+
+.account-transfer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.from-account, .to-account {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.label {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.account-number {
+  font-weight: 500;
+  font-family: monospace;
+}
+
+.transfer-arrow {
+  color: #007bff;
+  font-weight: bold;
+}
+
+.transaction-amount {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #28a745;
+  text-align: right;
+}
+
+.transaction-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.transaction-date {
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.transaction-currency {
+  font-size: 0.8rem;
+  color: #666;
+  background: #f8f9fa;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+/* Темная тема */
+[data-theme="dark"] .history-page {
+  background: #1a1a1a;
+}
+
+[data-theme="dark"] .history-header {
+  background: #2d2d2d;
+  border-bottom-color: #404040;
+}
+
+[data-theme="dark"] .back-button:hover {
+  background: #404040;
+}
+
+[data-theme="dark"] .history-header h2 {
+  color: #fff;
+}
+
+[data-theme="dark"] .transaction-card {
+  background: #2d2d2d;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+[data-theme="dark"] .label,
+[data-theme="dark"] .transaction-id,
+[data-theme="dark"] .transaction-date,
+[data-theme="dark"] .transaction-currency {
+  color: #aaa;
+}
+
+[data-theme="dark"] .account-number {
+  color: #fff;
+}
+
+[data-theme="dark"] .empty-state {
+  color: #aaa;
+}
+
+[data-theme="dark"] .empty-state h3 {
+  color: #fff;
+}
+
+[data-theme="dark"] .transaction-footer {
+  border-top-color: #404040;
+}
+
+[data-theme="dark"] .transaction-currency {
+  background: #404040;
+}
