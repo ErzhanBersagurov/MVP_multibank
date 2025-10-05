@@ -2,7 +2,7 @@ FROM golang:1.25-alpine
 
 WORKDIR /app
 
-# Копируем зависимости сначала для кэширования
+# Копируем зависимости
 COPY go.mod ./
 COPY go.sum ./
 RUN go mod download
@@ -15,5 +15,4 @@ RUN go build -o /auth-service ./cmd
 
 EXPOSE 8080
 
-# Запускаем сервис ( .env загружается автоматически через os.Getenv в коде)
 CMD ["/auth-service"]
