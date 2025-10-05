@@ -1,23 +1,44 @@
 import axios from 'axios';
 
-// Разные базовые URL для разных сервисов
-const AUTH_API_BASE = 'http://localhost:8080';
-const ACCOUNTS_API_BASE = 'http://localhost:8081';
-const TRANSFER_API_BASE = 'http://localhost:8082';
+// Автоматическое определение URLs
+const getBaseURL = (service) => {
+  // Если в продакшене (Render)
+  if (window.location.hostname.includes('onrender.com')) {
+    const urls = {
+      auth: 'https://multibank-auth.onrender.com',
+      accounts: 'https://multibank-accounts.onrender.com', 
+      transfer: 'https://multibank-transfer.onrender.com'
+    };
+    return urls[service];
+  }
+  
+  // Если через localtunnel
+  if (window.location.hostname.includes('loca.lt')) {
+    return window.location.origin;
+  }
+  
+  // Локальная разработка
+  const ports = {
+    auth: '8080',
+    accounts: '8081', 
+    transfer: '8082'
+  };
+  return `http://localhost:${ports[service]}`;
+};
 
 // Основной API instance для auth
 export const api = axios.create({
-  baseURL: AUTH_API_BASE,  // По умолчанию для auth
+  baseURL: getBaseURL('auth'),
 });
 
 // Отдельный instance для accounts
 export const accountsApi = axios.create({
-  baseURL: ACCOUNTS_API_BASE,
+  baseURL: getBaseURL('accounts'),
 });
 
-// Отдельный instance для transfer
+// Отдельный instance для transfer  
 export const transferApi = axios.create({
-  baseURL: TRANSFER_API_BASE,
+  baseURL: getBaseURL('transfer'),
 });
 
 // Текущий активный токен
@@ -27,8 +48,7 @@ let currentToken = localStorage.getItem('token');
 const refreshToken = async () => {
   try {
     console.log('🔄 Attempting token refresh...');
-    // ПРАВИЛЬНЫЙ endpoint для логина
-    const response = await axios.post(`${AUTH_API_BASE}/login`, {
+    const response = await axios.post(`${getBaseURL('auth')}/login`, {
       username: 'testuser',
       password: 'password123'
     });
@@ -54,7 +74,6 @@ const setupInterceptors = (axiosInstance) => {
       config.headers.Authorization = `Bearer ${currentToken}`;
     }
     
-    // Добавляем логирование для отладки
     console.log(`🔄 Making request to: ${config.baseURL}${config.url}`);
     return config;
   });
@@ -74,7 +93,7 @@ const setupInterceptors = (axiosInstance) => {
         try {
           const newToken = await refreshToken();
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
-          return axiosInstance(originalRequest); // Повторяем запрос
+          return axiosInstance(originalRequest);
         } catch (refreshError) {
           console.error('❌ Cannot refresh token, redirecting to login');
           localStorage.removeItem('token');
