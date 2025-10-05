@@ -62,7 +62,7 @@ func (s *TransferService) updateAccountBalances(fromAccount, toAccount string, a
     // Создаем HTTP клиент и запрос с авторизационным заголовком
     client := &http.Client{}
     // 🔥 ИСПРАВЛЕНИЕ: заменили localhost на accounts-service
-    req, err := http.NewRequest("POST", "http://accounts-service:8081/balance/update", bytes.NewBuffer(jsonData))
+    req, err := http.NewRequest("POST", "https://multibank-accounts.onrender.com/balance/update", bytes.NewBuffer(jsonData))
     if err != nil {
         return err
     }
