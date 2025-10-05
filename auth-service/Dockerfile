@@ -2,15 +2,12 @@ FROM golang:1.25-alpine
 
 WORKDIR /app
 
-# Копируем зависимости
-COPY go.mod ./
-COPY go.sum ./
-RUN go mod download
-
-# Копируем исходный код
+# Копируем ВЕСЬ проект
 COPY . .
 
-# Сборка
+# Переходим в папку auth-service и собираем
+WORKDIR /app/auth-service
+RUN go mod download
 RUN go build -o /auth-service ./cmd
 
 EXPOSE 8080

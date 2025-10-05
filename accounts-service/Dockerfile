@@ -2,15 +2,10 @@ FROM golang:1.25-alpine
 
 WORKDIR /app
 
-# Копируем зависимости
-COPY go.mod ./
-COPY go.sum ./
-RUN go mod download
-
-# Копируем исходный код
 COPY . .
 
-# Сборка
+WORKDIR /app/accounts-service
+RUN go mod download
 RUN go build -o /accounts-service ./cmd
 
 EXPOSE 8081
