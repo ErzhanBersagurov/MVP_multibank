@@ -4,26 +4,14 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    // host: '192.168.0.102', // ← ЗАКОММЕНТИРОВАТЬ для локальной разработки 
+    host: '0.0.0.0',
     port: 5173,
+    allowedHosts: true,  // ← Разрешает ВСЕ хосты
     proxy: {
-      '/api': {
-        target: 'http://localhost:8080',
-        changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, '')
-      },
-      '/accounts': {
-        target: 'http://localhost:8081',
-        changeOrigin: true
-      },
-      '/balance': {
-        target: 'http://localhost:8081',
-        changeOrigin: true
-      },
-      '/transfer': {
-        target: 'http://localhost:8082',
-        changeOrigin: true
-      }
+      '/api': 'http://localhost:8080',
+      '/accounts': 'http://localhost:8081', 
+      '/balance': 'http://localhost:8081',
+      '/transfer': 'http://localhost:8082'
     }
   }
 })
